@@ -1,0 +1,16 @@
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\bin\Debug\net8.0-windows\ArbolBinario.exe
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\bin\Debug\net8.0-windows\ArbolBinario.deps.json
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\bin\Debug\net8.0-windows\ArbolBinario.runtimeconfig.json
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\bin\Debug\net8.0-windows\ArbolBinario.dll
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\bin\Debug\net8.0-windows\ArbolBinario.pdb
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\ArbolBinario.Form1.resources
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\ArbolBinario.csproj.GenerateResource.cache
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\ArbolBinario.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\ArbolBinario.AssemblyInfoInputs.cache
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\ArbolBinario.AssemblyInfo.cs
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\ArbolBinario.csproj.CoreCompileInputs.cache
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\ArbolBinario.dll
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\refint\ArbolBinario.dll
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\ArbolBinario.pdb
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\ArbolBinario.genruntimeconfig.cache
+C:\Users\LuissxD\Documents\DisenioWebII\ArbolBinario\ArbolBinario\obj\Debug\net8.0-windows\ref\ArbolBinario.dll
