@@ -1,0 +1,32 @@
+name: Build y pruebas
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    # ArbolVisual es una app WinForms sobre .NET 8 (net8.0-windows), asi que
+    # necesitamos un runner Windows para poder compilarla y ejecutar sus pruebas.
+    runs-on: windows-latest
+
+    steps:
+      - name: Descargar el codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restaurar dependencias
+        run: dotnet restore ArbolBinario.sln
+
+      - name: Compilar la solucion (app + pruebas)
+        run: dotnet build ArbolBinario.sln --configuration Release --no-restore
+
+      - name: Ejecutar pruebas unitarias
+        run: dotnet test ArbolBinario.Tests/ArbolBinario.Tests.csproj --configuration Release --no-build --logger "console;verbosity=normal"
