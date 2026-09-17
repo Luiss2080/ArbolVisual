@@ -1,36 +1,99 @@
+# 🌳 ArbolVisual
 
-# 🌳 ArbolBinario – Visualizador y Gestor de Árboles Binarios en C#
+> Aplicación interactiva en C# y Windows Forms para crear, modificar y
+> visualizar un árbol binario de búsqueda (BST) paso a paso: pensada para
+> aprender de forma visual cómo insertar, eliminar, buscar y recorrer un BST,
+> con el dibujo del árbol recalculado en cada operación.
 
-¡Bienvenido! 👋 Este proyecto es una aplicación interactiva desarrollada en C# que permite crear, manipular y visualizar árboles binarios de manera sencilla y didáctica. Su interfaz gráfica (Windows Forms) facilita la comprensión de las estructuras de datos y su funcionamiento, ideal para estudiantes y entusiastas de la programación. 🚀
+## Características
 
+- **Árbol binario de búsqueda real**: inserta, elimina y busca valores
+  enteros (1 a 99) manteniendo la propiedad de orden del BST.
+- **Eliminación con dos hijos correctamente implementada**: al eliminar un
+  nodo con dos hijos se promueve su predecesor in-order (el mayor valor de
+  su subárbol izquierdo), reconectando los enlaces restantes. Cubierto por
+  pruebas automatizadas que verifican que el árbol resultante siga siendo
+  un BST válido (recorrido en-orden ordenado, sin nodos perdidos ni
+  duplicados), incluyendo el caso en que el predecesor tiene a su vez un
+  hijo izquierdo que debe promoverse.
+- **Recorridos en-orden, pre-orden y post-orden**, mostrados como texto y
+  animados visualmente (cada nodo se resalta en rojo un momento, en el
+  orden del recorrido elegido).
+- **Estadísticas del árbol**: altura, suma de los valores, cantidad de
+  nodos y profundidad de un valor específico.
+- **Operaciones seguras en casos límite**: insertar un valor duplicado o
+  eliminar/buscar un valor inexistente no corrompen el árbol ni bloquean la
+  aplicación; el árbol vacío se maneja sin errores (ver nota más abajo).
+- **El dibujo del árbol se recalcula por completo en cada operación**
+  (`Arbol_Binario.DibujarArbol` vuelve a calcular la posición de cada nodo
+  desde la raíz), por lo que lo que se ve en pantalla nunca queda
+  desincronizado de la estructura real tras insertar o eliminar.
 
+### Nota sobre un bug corregido
 
-## 🗂️ Estructura Interna del Proyecto
+Antes, llamar a **Eliminar** con el árbol vacío insertaba silenciosamente
+ese valor en vez de no hacer nada (un copiar-y-pegar del código de
+Insertar). Ya está corregido: eliminar sobre un árbol vacío simplemente no
+hace nada.
 
-🔹 **Arbol_Binario.cs**: Lógica principal del árbol binario (insertar, eliminar, buscar, recorrer). 🌲
-🔹 **Nodo_Arbol.cs**: Define los nodos del árbol, con referencias a hijos izquierdo y derecho. 🧩
-🔹 **Form1.cs**: Controla la interfaz gráfica y conecta la lógica con la interacción del usuario. 🖱️
-🔹 **Form1.Designer.cs**: Código de diseño visual del formulario (auto-generado). 🎨
-🔹 **Form1.resx**: Recursos del formulario (cadenas, imágenes, etc.). 🗃️
-🔹 **Program.cs**: Punto de entrada de la aplicación. 🚦
-🔹 **ArbolBinario.csproj**: Configuración y dependencias del proyecto. ⚙️
-🔹 **bin/** y **obj/**: Carpetas de archivos compilados y temporales. 🗄️
+### Limitación conocida
 
+Al buscar un valor, la posición del nodo encontrado se informa por texto
+(coordenadas X/Y) en un cuadro de diálogo, pero el nodo no se resalta
+visualmente sobre el dibujo del árbol (a diferencia de los recorridos, que
+sí animan cada nodo). Es una función incompleta heredada del código
+original, no un objetivo de esta ronda de correcciones.
 
-## ✨ Funcionalidades Principales
+## Cómo usar
 
-- ➕ **Agregar nodos**: Inserta nuevos valores en el árbol binario de forma dinámica.
-- ➖ **Eliminar nodos**: Elimina nodos específicos y ajusta la estructura automáticamente.
-- 🔍 **Buscar nodos**: Encuentra valores dentro del árbol de manera eficiente.
-- 🔄 **Recorridos**: Visualiza recorridos inorden, preorden y postorden.
-- 🖼️ **Visualización gráfica**: Observa el árbol binario de forma visual e interactiva.
+1. Abre `ArbolBinario.sln` en Visual Studio (con la carga de trabajo *.NET
+   desktop development*) y presiona **F5**, o compílalo desde la línea de
+   comandos (ver más abajo) y ejecuta el `.exe` generado.
+2. Escribe un valor entre 1 y 99 y usa **Insertar**, **Eliminar** o
+   **Buscar**.
+3. Usa los botones de recorrido (**En-Orden**, **Pre-Orden**, **Post-Orden**)
+   para ver la animación del recorrido elegido, o los botones de
+   **Altura**, **Suma de nodos**, **Contar nodos** y **Profundidad** para
+   ver estadísticas del árbol actual.
 
+## Instalación y uso local
 
-## 🛠️ ¿Cómo usarlo?
+Requiere Windows y el SDK de .NET 8 (el proyecto compila sobre
+`net8.0-windows`).
 
-1. Ejecuta la aplicación desde tu entorno de desarrollo favorito. ▶️
-2. Utiliza la interfaz para agregar, eliminar o buscar nodos fácilmente. 📝
-3. Visualiza el árbol y los resultados de los recorridos en pantalla. 👀
+```bash
+git clone https://github.com/Luiss2080/ArbolVisual.git
+cd ArbolVisual
 
+# Compilar la app y el proyecto de pruebas
+dotnet build ArbolBinario.sln
 
-Este proyecto es ideal para aprender y practicar conceptos de estructuras de datos, especialmente árboles binarios, en un entorno visual e interactivo. Perfecto para estudiantes, docentes y cualquier persona interesada en la programación. 💡
+# Ejecutar la app (WinForms; requiere Windows)
+dotnet run --project ArbolBinario/ArbolBinario.csproj
+```
+
+## Tecnologías
+
+- **C#** sobre **.NET 8** (`net8.0-windows`, `ArbolBinario.csproj`)
+- **Windows Forms**, con dibujo personalizado del árbol mediante
+  `System.Drawing`/GDI+
+- **xUnit** para las pruebas unitarias del BST
+- **GitHub Actions** para build y pruebas automáticas en cada cambio
+  (`.github/workflows/build-and-test.yml`)
+
+## Tests
+
+El BST (`Arbol_Binario`/`Nodo_Arbol`) está cubierto por 24 pruebas
+unitarias que no dependen de la interfaz gráfica: inserción, eliminación
+(incluyendo el caso de dos hijos, en varias formas de árbol), búsqueda,
+recorridos en árboles balanceados y degenerados, y casos límite (árbol
+vacío, un solo nodo, eliminar la raíz repetidamente, duplicados, valores
+inexistentes).
+
+```bash
+dotnet test ArbolBinario.Tests/ArbolBinario.Tests.csproj
+```
+
+## Licencia
+
+MIT. Consulta el archivo [`LICENSE`](LICENSE).
