@@ -14,8 +14,7 @@ namespace ArbolBinario
         public int info; // Dato a almacenar en el nodo
         public Nodo_Arbol Izquierdo; 
         public Nodo_Arbol Derecho; 
-        public Nodo_Arbol Padre; 
-        public int altura;
+        public Nodo_Arbol Padre;
         public int nivel;
         public Rectangle nodo; 
 
@@ -53,7 +52,6 @@ namespace ArbolBinario
             Izquierdo = izquierdo;
             Derecho = derecho;
             Padre = padre;
-            altura = 0;
         }
 
         // Implementa la lógica BST recursiva para inserción de nodos.
@@ -129,81 +127,41 @@ namespace ArbolBinario
                     }
                     else
                     {
-                        // Caso 2: Nodo con dos hijos
+                        // Caso 2: Nodo con dos hijos.
+                        //
+                        // NOTA sobre una version anterior de este metodo: aqui habia tres
+                        // ramas que decidian entre "sucesor" o "predecesor" in-order
+                        // comparando Alturas(t.Izquierdo) y Alturas(t.Derecho) (el campo
+                        // `altura` de Nodo_Arbol). Ese campo se inicializa una vez en el
+                        // constructor y nunca se vuelve a actualizar en ningun Insertar ni
+                        // Eliminar del codigo, asi que para cualquier nodo con dos hijos
+                        // *siempre* vale Alturas(Izquierdo) == Alturas(Derecho) == 0: las
+                        // dos primeras ramas (basadas en una diferencia de altura) eran
+                        // codigo muerto que nunca se ejecutaba, y solo corria la tercera
+                        // ("alturas iguales, prioriza izquierdo"). Se deja unicamente esa
+                        // logica, ahora explicita: se promueve el predecesor in-order
+                        // (el valor mas grande del subarbol izquierdo).
+                        Nodo_Arbol padreDelPredecesor = t;
+                        Nodo_Arbol predecesor = t.Izquierdo;
 
-                        // Si subárbol izquierdo es más alto
-                        if (Alturas(t.Izquierdo) - Alturas(t.Derecho) > 0)
+                        // Navega hasta el nodo mas a la derecha del subarbol izquierdo.
+                        while (predecesor.Derecho != null)
                         {
-                            // Busca el sucesor in-order (mayor valor del subárbol izquierdo)
-                            Nodo_Arbol AuxiliarNodo = null;
-                            Nodo_Arbol Auxiliar = t.Izquierdo;
-                            bool bandera = false;
-
-                            // Navega hasta el nodo más a la derecha
-                            while (Auxiliar.Derecho != null)
-                            {
-                                AuxiliarNodo = Auxiliar;
-                                Auxiliar = Auxiliar.Derecho;
-                                bandera = true;
-                            }
-
-                            // Reemplaza valor y reconecta los enlaces
-                            t.info = Auxiliar.info;
-                            NodoEliminar = Auxiliar;
-
-                            if (bandera)
-                                AuxiliarNodo.Derecho = Auxiliar.Izquierdo;
-                            else
-                                t.Izquierdo = Auxiliar.Izquierdo;
+                            padreDelPredecesor = predecesor;
+                            predecesor = predecesor.Derecho;
                         }
-                        else if (Alturas(t.Derecho) - Alturas(t.Izquierdo) > 0)
-                        {
-                            // Si subárbol derecho es más alto
-                            // Busca el predecesor in-order (menor valor del subárbol derecho)
-                            Nodo_Arbol AuxiliarNodo = null;
-                            Nodo_Arbol Auxiliar = t.Derecho;
-                            bool bandera = false;
 
-                            // Navega hasta el nodo más a la izquierda
-                            while (Auxiliar.Izquierdo != null)
-                            {
-                                AuxiliarNodo = Auxiliar;
-                                Auxiliar = Auxiliar.Izquierdo;
-                                bandera = true;
-                            }
+                        // Copia el valor del predecesor al nodo que se está "eliminando"
+                        // (el nodo en sí no se destruye, solo cambia su dato) y desconecta
+                        // el nodo predecesor de su posición original, promoviendo su propio
+                        // hijo izquierdo (si tiene) en su lugar.
+                        t.info = predecesor.info;
+                        NodoEliminar = predecesor;
 
-                            // Reemplaza y reconecta
-                            t.info = Auxiliar.info;
-                            NodoEliminar = Auxiliar;
-
-                            if (bandera)
-                                AuxiliarNodo.Izquierdo = Auxiliar.Derecho;
-                            else
-                                t.Derecho = Auxiliar.Derecho;
-                        }
+                        if (padreDelPredecesor == t)
+                            padreDelPredecesor.Izquierdo = predecesor.Izquierdo;
                         else
-                        {
-                            // Si ambos subárboles tienen igual altura, prioriza izquierdo
-                            // Usa la misma lógica del primer caso
-                            Nodo_Arbol AuxiliarNodo = null;
-                            Nodo_Arbol Auxiliar = t.Izquierdo;
-                            bool bandera = false;
-
-                            while (Auxiliar.Derecho != null)
-                            {
-                                AuxiliarNodo = Auxiliar;
-                                Auxiliar = Auxiliar.Derecho;
-                                bandera = true;
-                            }
-
-                            t.info = Auxiliar.info;
-                            NodoEliminar = Auxiliar;
-
-                            if (bandera)
-                                AuxiliarNodo.Derecho = Auxiliar.Izquierdo;
-                            else
-                                t.Izquierdo = Auxiliar.Izquierdo;
-                        }
+                            padreDelPredecesor.Derecho = predecesor.Izquierdo;
                     }
                 }
 
@@ -350,14 +308,6 @@ namespace ArbolBinario
 
 
 
-
-
-
-        // Obtiene altura de un nodo (devuelve -1 si es nulo)
-        private static int Alturas(Nodo_Arbol t)
-        {
-            return t == null ? -1 : t.altura;
-        }
 
 
 
