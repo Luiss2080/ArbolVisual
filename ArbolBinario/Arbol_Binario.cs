@@ -42,11 +42,11 @@ namespace ArbolBinario
 
         public void Eliminar(int x)
         {
-            // Si el árbol está vacío, se crea un nuevo nodo raíz con el valor dado.
-            if (Raiz == null)
-                Raiz = new Nodo_Arbol(x, null, null, null);
-            else
-                // Si el árbol no está vacío, se llama al método Eliminar del nodo raíz.
+            // Si el árbol está vacío no hay nada que eliminar.
+            // (Antes, por un copiar-y-pegar de Insertar, esta rama creaba un nodo
+            // nuevo con el valor `x`: llamar a Eliminar sobre un árbol vacío
+            // insertaba un dato en vez de no hacer nada.)
+            if (Raiz != null)
                 Raiz.Eliminar(x, ref Raiz);
         }
 
