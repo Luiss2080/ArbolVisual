@@ -16,36 +16,36 @@ namespace ArbolBinario
         // Variables globales del formulario
         int Dato = 0;  
         int cont = 0; 
-        Arbol_Binario mi_Arbol = new Arbol_Binario(null);  // Instancia principal del árbol
-        Graphics g;  // Contexto gráfico para dibujar
+        Arbol_Binario mi_Arbol = new Arbol_Binario(null);  // Instancia principal del ï¿½rbol
+        Graphics g;  // Contexto grï¿½fico para dibujar
 
-        // Variables para el control de la animación
+        // Variables para el control de la animaciï¿½n
         private PictureBox pictureBoxArbol;      
         private PictureBox pictureBoxAnimacion; 
-        private bool enAnimacion = false;        // Bandera para controlar estado de animación
+        private bool enAnimacion = false;        // Bandera para controlar estado de animaciï¿½n
 
         // Constructor del formulario
         public Form1()
         {
             InitializeComponent();
 
-            // Configurar el PictureBox principal para el árbol
+            // Configurar el PictureBox principal para el ï¿½rbol
             pictureBoxArbol = new PictureBox();
             pictureBoxArbol.Dock = DockStyle.None;
             pictureBoxArbol.BackColor = Color.FromArgb(240, 240, 240); // Color de fondo que coincide con el formulario
             this.Controls.Add(pictureBoxArbol);
 
-            // Configurar el PictureBox para la animación
+            // Configurar el PictureBox para la animaciï¿½n
             pictureBoxAnimacion = new PictureBox();
             pictureBoxAnimacion.Dock = DockStyle.None;
             pictureBoxAnimacion.BackColor = Color.FromArgb(240, 240, 240);
             pictureBoxAnimacion.Visible = false;
             this.Controls.Add(pictureBoxAnimacion);
 
-            // Configurar el área de dibujo después de crear ambos PictureBox
+            // Configurar el ï¿½rea de dibujo despuï¿½s de crear ambos PictureBox
             ConfigurarAreaDibujo();
 
-            // Asegurarnos de que los controles de entrada estén por encima de los PictureBox
+            // Asegurarnos de que los controles de entrada estï¿½n por encima de los PictureBox
             foreach (Control control in this.Controls)
             {
                 if (control != pictureBoxArbol && control != pictureBoxAnimacion)
@@ -57,7 +57,7 @@ namespace ArbolBinario
             // Inicializar los bitmaps para los PictureBox
             ActualizarBitmaps();
 
-            // Suscribe el método Form1_Resize al evento Resize para redibujar automáticamente
+            // Suscribe el mï¿½todo Form1_Resize al evento Resize para redibujar automï¿½ticamente
             this.Resize += new EventHandler(Form1_Resize);
 
             // Suscribirse al evento Paint del formulario
@@ -69,18 +69,18 @@ namespace ArbolBinario
 
 
 
-        // Método para actualizar los bitmaps cuando cambia el tamaño del formulario
+        // Mï¿½todo para actualizar los bitmaps cuando cambia el tamaï¿½o del formulario
         private void ActualizarBitmaps()
         {
-            // Verificar que los PictureBox existen y tienen dimensiones válidas
+            // Verificar que los PictureBox existen y tienen dimensiones vï¿½lidas
             if (pictureBoxArbol != null && pictureBoxAnimacion != null &&
                 pictureBoxArbol.Width > 0 && pictureBoxArbol.Height > 0)
             {
-                // Crear nuevos bitmaps del tamaño adecuado
+                // Crear nuevos bitmaps del tamaï¿½o adecuado
                 pictureBoxArbol.Image = new Bitmap(pictureBoxArbol.Width, pictureBoxArbol.Height);
                 pictureBoxAnimacion.Image = new Bitmap(pictureBoxAnimacion.Width, pictureBoxAnimacion.Height);
 
-                // Si no estamos en animación, dibujar el árbol
+                // Si no estamos en animaciï¿½n, dibujar el ï¿½rbol
                 if (!enAnimacion)
                 {
                     DibujarArbol();
@@ -92,28 +92,28 @@ namespace ArbolBinario
 
 
 
-        // Método para configurar el área de dibujo
+        // Mï¿½todo para configurar el ï¿½rea de dibujo
         private void ConfigurarAreaDibujo()
         {
-            // Encontrar la posición más baja de los controles superiores
+            // Encontrar la posiciï¿½n mï¿½s baja de los controles superiores
             int topY = 0;
             foreach (Control control in this.Controls)
             {
                 if (control != pictureBoxArbol && control != pictureBoxAnimacion &&
                     control.Top < this.Height / 3 && control.Bottom > topY)
                 {
-                    topY = control.Bottom + 10; // Añadimos un margen de 10 píxeles
+                    topY = control.Bottom + 10; // Aï¿½adimos un margen de 10 pï¿½xeles
                 }
             }
 
-            // Encontrar la posición más alta de los controles inferiores
+            // Encontrar la posiciï¿½n mï¿½s alta de los controles inferiores
             int bottomY = this.ClientSize.Height;
             foreach (Control control in this.Controls)
             {
                 if (control != pictureBoxArbol && control != pictureBoxAnimacion &&
                     control.Top > this.Height * 2 / 3 && control.Top < bottomY)
                 {
-                    bottomY = control.Top - 10; // Restamos un margen de 10 píxeles
+                    bottomY = control.Top - 10; // Restamos un margen de 10 pï¿½xeles
                 }
             }
 
@@ -123,18 +123,18 @@ namespace ArbolBinario
             // Calculamos la altura disponible
             int height = bottomY - topY;
 
-            // Si por alguna razón el cálculo no resulta en un área válida, usamos valores predeterminados
+            // Si por alguna razï¿½n el cï¿½lculo no resulta en un ï¿½rea vï¿½lida, usamos valores predeterminados
             if (height <= 0)
             {
                 topY = 160; // Valor aproximado para dejar espacio a los controles superiores
                 height = this.ClientSize.Height - 250; // Dejamos espacio para los controles inferiores
             }
 
-            // Configuramos el área de los PictureBox
+            // Configuramos el ï¿½rea de los PictureBox
             pictureBoxArbol.Location = new Point(0, topY);
             pictureBoxArbol.Size = new Size(width, height);
 
-            // Actualizamos también el área del PictureBox de animación
+            // Actualizamos tambiï¿½n el ï¿½rea del PictureBox de animaciï¿½n
             pictureBoxAnimacion.Location = new Point(0, topY);
             pictureBoxAnimacion.Size = new Size(width, height);
         }
@@ -143,13 +143,13 @@ namespace ArbolBinario
 
 
 
-        // Redibuja el formulario al cambiar su tamaño
+        // Redibuja el formulario al cambiar su tamaï¿½o
         private void Form1_Resize(object sender, EventArgs e)
         {
-            // Recalculamos el área de dibujo
+            // Recalculamos el ï¿½rea de dibujo
             ConfigurarAreaDibujo();
 
-            // Actualizar los bitmaps con el nuevo tamaño
+            // Actualizar los bitmaps con el nuevo tamaï¿½o
             ActualizarBitmaps();
         }
 
@@ -157,7 +157,7 @@ namespace ArbolBinario
 
 
 
-        // Método responsable de renderizar el árbol en el formulario
+        // Mï¿½todo responsable de renderizar el ï¿½rbol en el formulario
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             if (!enAnimacion)
@@ -170,26 +170,26 @@ namespace ArbolBinario
 
 
 
-        // Método para dibujar el árbol en el PictureBox principal
+        // Mï¿½todo para dibujar el ï¿½rbol en el PictureBox principal
         private void DibujarArbol()
         {
             if (pictureBoxArbol != null && pictureBoxArbol.Image != null)
             {
                 using (Graphics g = Graphics.FromImage(pictureBoxArbol.Image))
                 {
-                    // Limpia el área de dibujo con el color de fondo actual
+                    // Limpia el ï¿½rea de dibujo con el color de fondo actual
                     g.Clear(pictureBoxArbol.BackColor);
 
                     // Configura opciones para mejorar la calidad visual del texto
                     g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
-                    // Activa suavizado para líneas y formas
+                    // Activa suavizado para lï¿½neas y formas
                     g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                    // Llama al método de dibujo del árbol pasando parámetros de estilo
+                    // Llama al mï¿½todo de dibujo del ï¿½rbol pasando parï¿½metros de estilo
                     if (mi_Arbol.Raiz != null)
                     {
-                        // Pasamos el ancho del PictureBox para centrar el árbol en el área disponible
+                        // Pasamos el ancho del PictureBox para centrar el ï¿½rbol en el ï¿½rea disponible
                         mi_Arbol.DibujarArbol(g, this.Font, Brushes.Blue, Brushes.White, Pens.Black, Brushes.White, pictureBoxArbol.Width);
                     }
                 }
@@ -201,20 +201,20 @@ namespace ArbolBinario
 
 
 
-        // Método para iniciar la animación de recorrido
+        // Mï¿½todo para iniciar la animaciï¿½n de recorrido
         private void IniciarAnimacionRecorrido(bool postOrden, bool enOrden, bool preOrden)
         {
             if (mi_Arbol.Raiz != null && pictureBoxAnimacion != null && pictureBoxAnimacion.Image != null)
             {
-                // Indicar que estamos en animación
+                // Indicar que estamos en animaciï¿½n
                 enAnimacion = true;
 
-                // Ocultar el PictureBox del árbol y mostrar el de animación
+                // Ocultar el PictureBox del ï¿½rbol y mostrar el de animaciï¿½n
                 pictureBoxArbol.Visible = false;
                 pictureBoxAnimacion.Visible = true;
                 pictureBoxAnimacion.BringToFront();
 
-                // Asegurarse de que los controles están por encima
+                // Asegurarse de que los controles estï¿½n por encima
                 foreach (Control control in this.Controls)
                 {
                     if (control != pictureBoxArbol && control != pictureBoxAnimacion)
@@ -223,7 +223,7 @@ namespace ArbolBinario
                     }
                 }
 
-                // Ejecutar la animación en un hilo separado para no bloquear la interfaz
+                // Ejecutar la animaciï¿½n en un hilo separado para no bloquear la interfaz
                 Thread hiloAnimacion = new Thread(() =>
                 {
                     try
@@ -234,31 +234,31 @@ namespace ArbolBinario
                             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
                             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                            // Ejecutar la animación
+                            // Ejecutar la animaciï¿½n
                             AnimarRecorrido(g, postOrden, enOrden, preOrden);
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error durante la animación: " + ex.Message);
+                        MessageBox.Show("Error durante la animaciï¿½n: " + ex.Message);
                     }
                     finally
                     {
-                        // Al terminar, volver al hilo de UI para restaurar el árbol original
+                        // Al terminar, volver al hilo de UI para restaurar el ï¿½rbol original
                         if (this.IsHandleCreated)
                         {
                             this.Invoke(new Action(() =>
                             {
                                 try
                                 {
-                                    // Ocultar el PictureBox de animación y mostrar el original
+                                    // Ocultar el PictureBox de animaciï¿½n y mostrar el original
                                     pictureBoxAnimacion.Visible = false;
                                     pictureBoxArbol.Visible = true;
 
-                                    // Ya no estamos en animación
+                                    // Ya no estamos en animaciï¿½n
                                     enAnimacion = false;
 
-                                    // Redibujar el árbol original
+                                    // Redibujar el ï¿½rbol original
                                     DibujarArbol();
                                 }
                                 catch { }
@@ -276,10 +276,10 @@ namespace ArbolBinario
 
 
 
-        // Método para animar el recorrido en el bitmap
+        // Mï¿½todo para animar el recorrido en el bitmap
         private void AnimarRecorrido(Graphics g, bool postOrden, bool enOrden, bool preOrden)
         {
-            // Primero dibujamos el árbol completo para tener una base
+            // Primero dibujamos el ï¿½rbol completo para tener una base
             mi_Arbol.DibujarArbol(g, this.Font, Brushes.Blue, Brushes.White, Pens.Black, Brushes.White, pictureBoxAnimacion.Width);
 
             // Invalidar el PictureBox para que muestre el dibujo inicial
@@ -291,7 +291,7 @@ namespace ArbolBinario
                 }
             }));
 
-            // Ahora hacemos la animación del recorrido específico
+            // Ahora hacemos la animaciï¿½n del recorrido especï¿½fico
             if (enOrden)
             {
                 AnimarRecorridoEnOrden(g, mi_Arbol.Raiz);
@@ -310,22 +310,22 @@ namespace ArbolBinario
 
 
 
-        // Métodos para animar los diferentes tipos de recorrido
+        // Mï¿½todos para animar los diferentes tipos de recorrido
         private void AnimarRecorridoEnOrden(Graphics g, Nodo_Arbol nodo)
         {
             if (nodo != null)
             {
-                // Recorrer subárbol izquierdo
+                // Recorrer subï¿½rbol izquierdo
                 AnimarRecorridoEnOrden(g, nodo.Izquierdo);
 
                 // Resaltar nodo actual
                 ResaltarNodo(g, nodo, Brushes.Red);
-                Thread.Sleep(1000); // Pausa para visualización
+                Thread.Sleep(1000); // Pausa para visualizaciï¿½n
 
                 // Restaurar color original
                 ResaltarNodo(g, nodo, Brushes.Blue);
 
-                // Recorrer subárbol derecho
+                // Recorrer subï¿½rbol derecho
                 AnimarRecorridoEnOrden(g, nodo.Derecho);
             }
         }
@@ -340,15 +340,15 @@ namespace ArbolBinario
             {
                 // Resaltar nodo actual
                 ResaltarNodo(g, nodo, Brushes.Red);
-                Thread.Sleep(1000); // Pausa para visualización
+                Thread.Sleep(1000); // Pausa para visualizaciï¿½n
 
                 // Restaurar color original
                 ResaltarNodo(g, nodo, Brushes.Blue);
 
-                // Recorrer subárbol izquierdo
+                // Recorrer subï¿½rbol izquierdo
                 AnimarRecorridoPreOrden(g, nodo.Izquierdo);
 
-                // Recorrer subárbol derecho
+                // Recorrer subï¿½rbol derecho
                 AnimarRecorridoPreOrden(g, nodo.Derecho);
             }
         }
@@ -361,15 +361,15 @@ namespace ArbolBinario
         {
             if (nodo != null)
             {
-                // Recorrer subárbol izquierdo
+                // Recorrer subï¿½rbol izquierdo
                 AnimarRecorridoPostOrden(g, nodo.Izquierdo);
 
-                // Recorrer subárbol derecho
+                // Recorrer subï¿½rbol derecho
                 AnimarRecorridoPostOrden(g, nodo.Derecho);
 
                 // Resaltar nodo actual
                 ResaltarNodo(g, nodo, Brushes.Red);
-                Thread.Sleep(1000); // Pausa para visualización
+                Thread.Sleep(1000); // Pausa para visualizaciï¿½n
 
                 // Restaurar color original
                 ResaltarNodo(g, nodo, Brushes.Blue);
@@ -380,7 +380,7 @@ namespace ArbolBinario
 
 
 
-        // Método auxiliar para resaltar un nodo con un color específico
+        // Mï¿½todo auxiliar para resaltar un nodo con un color especï¿½fico
         private void ResaltarNodo(Graphics g, Nodo_Arbol nodo, Brush colorRelleno)
         {
             try
@@ -405,7 +405,7 @@ namespace ArbolBinario
                 formato.LineAlignment = StringAlignment.Center;
                 g.DrawString(nodo.info.ToString(), this.Font, Brushes.White, nodo.CoordenadaX, nodo.CoordenadaY, formato);
 
-                // Invalidar el PictureBox para que se actualice la visualización
+                // Invalidar el PictureBox para que se actualice la visualizaciï¿½n
                 this.Invoke(new Action(() =>
                 {
                     if (pictureBoxAnimacion != null && pictureBoxAnimacion.IsHandleCreated)
@@ -421,10 +421,10 @@ namespace ArbolBinario
 
 
 
-        // Manejador del evento click del botón Insertar
+        // Manejador del evento click del botï¿½n Insertar
         private void btnInsertar_Click(object sender, EventArgs e)
         {
-            // Verifica que el campo no esté vacío
+            // Verifica que el campo no estï¿½ vacï¿½o
             if (txtDato.Text == "")
             {
                 MessageBox.Show("Debe Ingresar un Valor");
@@ -441,23 +441,30 @@ namespace ArbolBinario
                         MessageBox.Show("Solo Recibe Valores desde 1 hasta 99", "Error de Ingreso");
                     else
                     {
-                        // Inserta el valor en el árbol
-                        mi_Arbol.Insertar(Dato);
+                        // Inserta el valor en el ï¿½rbol
+                        bool insertado = mi_Arbol.Insertar(Dato);
+
+                        if (!insertado)
+                        {
+                            MessageBox.Show("Dato existente en el Arbol", "Error de Ingreso");
+                        }
+                        else
+                        {
+                            // Solo cuenta el nodo si realmente se inserto
+                            cont++;
+                        }
 
                         // Limpia y enfoca el campo de texto para nueva entrada
                         txtDato.Clear();
                         txtDato.Focus();
 
-                        // Incrementa contador de nodos
-                        cont++;
-
-                        // Actualiza la visualización del árbol
+                        // Actualiza la visualizaciï¿½n del ï¿½rbol
                         DibujarArbol();
                     }
                 }
                 catch (FormatException)
                 {
-                    MessageBox.Show("Ingrese un valor numérico válido", "Error de formato");
+                    MessageBox.Show("Ingrese un valor numï¿½rico vï¿½lido", "Error de formato");
                     txtDato.Clear();
                     txtDato.Focus();
                 }
@@ -468,10 +475,10 @@ namespace ArbolBinario
 
 
 
-        // Manejador del evento click del botón Eliminar
+        // Manejador del evento click del botï¿½n Eliminar
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            // Verifica que el campo no esté vacío
+            // Verifica que el campo no estï¿½ vacï¿½o
             if (txtEliminar.Text == "")
             {
                 MessageBox.Show("Debe ingresar el valor a eliminar");
@@ -486,27 +493,34 @@ namespace ArbolBinario
                     // Valida el rango permitido (1-99)
                     if (Dato <= 0 || Dato >= 100)
                     {
-                        MessageBox.Show("Sólo se admiten valores entre 1 y 99", "Error de Ingreso");
+                        MessageBox.Show("Sï¿½lo se admiten valores entre 1 y 99", "Error de Ingreso");
                     }
                     else
                     {
                         // Elimina el nodo con el valor especificado
-                        mi_Arbol.Eliminar(Dato);
+                        bool eliminado = mi_Arbol.Eliminar(Dato);
+
+                        if (!eliminado)
+                        {
+                            MessageBox.Show("Nodo NO existente en el Arbol", "Error de eliminacion");
+                        }
+                        else
+                        {
+                            // Solo descuenta el nodo si realmente se elimino
+                            cont--;
+                        }
 
                         // Limpia y enfoca el campo para nueva entrada
                         txtEliminar.Clear();
                         txtEliminar.Focus();
 
-                        // Decrementa contador de nodos
-                        cont--;
-
-                        // Actualiza la visualización del árbol
+                        // Actualiza la visualizaciï¿½n del ï¿½rbol
                         DibujarArbol();
                     }
                 }
                 catch (FormatException)
                 {
-                    MessageBox.Show("Ingrese un valor numérico válido", "Error de formato");
+                    MessageBox.Show("Ingrese un valor numï¿½rico vï¿½lido", "Error de formato");
                     txtEliminar.Clear();
                     txtEliminar.Focus();
                 }
@@ -518,10 +532,10 @@ namespace ArbolBinario
 
 
 
-        // Manejador del evento click del botón Buscar
+        // Manejador del evento click del botï¿½n Buscar
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            // Verifica que el campo no esté vacío
+            // Verifica que el campo no estï¿½ vacï¿½o
             if (txtBuscar.Text == "")
             {
                 MessageBox.Show("Debe ingresar el valor a buscar");
@@ -536,24 +550,33 @@ namespace ArbolBinario
                     // Valida el rango permitido
                     if (Dato <= 0 || Dato >= 100)
                     {
-                        MessageBox.Show("Sólo se admiten valores entre 1 y 99", "Error de Ingreso");
+                        MessageBox.Show("Sï¿½lo se admiten valores entre 1 y 99", "Error de Ingreso");
                     }
                     else
                     {
                         // Busca el nodo con el valor especificado
-                        mi_Arbol.Buscar(Dato);
+                        Nodo_Arbol encontrado = mi_Arbol.Buscar(Dato);
 
-                        // Limpia y enfoca el campo para nueva búsqueda
+                        if (encontrado != null)
+                        {
+                            MessageBox.Show("Nodo encontrado en la posicion X: " + encontrado.CoordenadaX + " Y:" + encontrado.CoordenadaY);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Nodo NO encontrado", "Error de busqueda");
+                        }
+
+                        // Limpia y enfoca el campo para nueva bï¿½squeda
                         txtBuscar.Clear();
                         txtBuscar.Focus();
 
-                        // Actualiza la visualización (aunque la búsqueda no modifica estructura)
+                        // Actualiza la visualizaciï¿½n (aunque la bï¿½squeda no modifica estructura)
                         DibujarArbol();
                     }
                 }
                 catch (FormatException)
                 {
-                    MessageBox.Show("Ingrese un valor numérico válido", "Error de formato");
+                    MessageBox.Show("Ingrese un valor numï¿½rico vï¿½lido", "Error de formato");
                     txtBuscar.Clear();
                     txtBuscar.Focus();
                 }
@@ -565,20 +588,20 @@ namespace ArbolBinario
 
 
 
-        // Manejador del evento click del botón En-Orden
+        // Manejador del evento click del botï¿½n En-Orden
         private void btnEnOrden_Click(object sender, EventArgs e)
         {
             if (mi_Arbol.Raiz != null)
             {
-                // Muestra el recorrido en-orden (izquierda-raíz-derecha) en el label
+                // Muestra el recorrido en-orden (izquierda-raï¿½z-derecha) en el label
                 lblRecorrido.Text = "Recorrido En Orden: " + mi_Arbol.RecorridoEnOrden();
 
-                // Inicia la animación del recorrido
+                // Inicia la animaciï¿½n del recorrido
                 IniciarAnimacionRecorrido(false, true, false);
             }
             else
             {
-                lblRecorrido.Text = "El árbol está vacío";
+                lblRecorrido.Text = "El ï¿½rbol estï¿½ vacï¿½o";
             }
         }
 
@@ -586,20 +609,20 @@ namespace ArbolBinario
 
 
 
-        // Manejador del evento click del botón Pre-Orden
+        // Manejador del evento click del botï¿½n Pre-Orden
         private void btnPreOrden_Click(object sender, EventArgs e)
         {
             if (mi_Arbol.Raiz != null)
             {
-                // Muestra el recorrido pre-orden (raíz-izquierda-derecha) en el label
+                // Muestra el recorrido pre-orden (raï¿½z-izquierda-derecha) en el label
                 lblRecorrido.Text = "Recorrido Pre-Orden: " + mi_Arbol.RecorridoPreOrden();
 
-                // Inicia la animación del recorrido
+                // Inicia la animaciï¿½n del recorrido
                 IniciarAnimacionRecorrido(false, false, true);
             }
             else
             {
-                lblRecorrido.Text = "El árbol está vacío";
+                lblRecorrido.Text = "El ï¿½rbol estï¿½ vacï¿½o";
             }
         }
 
@@ -607,20 +630,20 @@ namespace ArbolBinario
 
 
 
-        // Manejador del evento click del botón Post-Orden
+        // Manejador del evento click del botï¿½n Post-Orden
         private void btnPostOrden_Click(object sender, EventArgs e)
         {
             if (mi_Arbol.Raiz != null)
             {
-                // Muestra el recorrido post-orden (izquierda-derecha-raíz) en el label
+                // Muestra el recorrido post-orden (izquierda-derecha-raï¿½z) en el label
                 lblRecorrido.Text = "Recorrido Post-Orden: " + mi_Arbol.RecorridoPostOrden();
 
-                // Inicia la animación del recorrido
+                // Inicia la animaciï¿½n del recorrido
                 IniciarAnimacionRecorrido(true, false, false);
             }
             else
             {
-                lblRecorrido.Text = "El árbol está vacío";
+                lblRecorrido.Text = "El ï¿½rbol estï¿½ vacï¿½o";
             }
         }
 
@@ -629,20 +652,20 @@ namespace ArbolBinario
 
 
 
-        // Manejador del evento click del botón Altura
+        // Manejador del evento click del botï¿½n Altura
         private void btnAltura_Click(object sender, EventArgs e)
         {
             if (mi_Arbol.Raiz != null)
             {
-                // Obtiene la altura calculada desde el método del árbol
+                // Obtiene la altura calculada desde el mï¿½todo del ï¿½rbol
                 int altura = mi_Arbol.ObtenerAltura();
 
                 // Muestra el resultado en el control de etiqueta
-                lblRecorrido.Text = "Altura del árbol: " + altura;
+                lblRecorrido.Text = "Altura del ï¿½rbol: " + altura;
             }
             else
             {
-                lblRecorrido.Text = "El árbol está vacío";
+                lblRecorrido.Text = "El ï¿½rbol estï¿½ vacï¿½o";
             }
         }
 
@@ -651,7 +674,7 @@ namespace ArbolBinario
 
 
 
-        // Manejador del evento click del botón Sumar Nodos
+        // Manejador del evento click del botï¿½n Sumar Nodos
         private void btnSumarNodos_Click(object sender, EventArgs e)
         {
             if (mi_Arbol.Raiz != null)
@@ -664,7 +687,7 @@ namespace ArbolBinario
             }
             else
             {
-                lblRecorrido.Text = "El árbol está vacío";
+                lblRecorrido.Text = "El ï¿½rbol estï¿½ vacï¿½o";
             }
         }
 
@@ -672,7 +695,7 @@ namespace ArbolBinario
 
 
 
-        // Manejador del evento click del botón Contar Nodos
+        // Manejador del evento click del botï¿½n Contar Nodos
         private void btnContarNodos_Click(object sender, EventArgs e)
         {
             if (mi_Arbol.Raiz != null)
@@ -681,11 +704,11 @@ namespace ArbolBinario
                 int cantidad = mi_Arbol.ContarNodos();
 
                 // Muestra el resultado en la etiqueta
-                lblRecorrido.Text = "Número de nodos en el árbol: " + cantidad;
+                lblRecorrido.Text = "Nï¿½mero de nodos en el ï¿½rbol: " + cantidad;
             }
             else
             {
-                lblRecorrido.Text = "El árbol está vacío";
+                lblRecorrido.Text = "El ï¿½rbol estï¿½ vacï¿½o";
             }
         }
 
@@ -694,21 +717,21 @@ namespace ArbolBinario
 
 
 
-        // Manejador del evento click del botón Profundidad
+        // Manejador del evento click del botï¿½n Profundidad
         private void btnProfundidad_Click(object sender, EventArgs e)
         {
-            // Verifica que el campo no esté vacío
+            // Verifica que el campo no estï¿½ vacï¿½o
             if (txtProfundidad.Text == "")
             {
                 MessageBox.Show("Debe ingresar un valor para buscar su profundidad");
             }
             else
             {
-                // Verifica que el árbol no esté vacío
+                // Verifica que el ï¿½rbol no estï¿½ vacï¿½o
                 if (mi_Arbol.Raiz != null)
                 {
                     int valor;
-                    // Intenta convertir usando TryParse (más seguro que Parse)
+                    // Intenta convertir usando TryParse (mï¿½s seguro que Parse)
                     if (int.TryParse(txtProfundidad.Text, out valor))
                     {
                         // Busca la profundidad del nodo con el valor especificado
@@ -719,16 +742,16 @@ namespace ArbolBinario
                             lblRecorrido.Text = "Profundidad del nodo " + valor + ": " + profundidad;
                         else
                             // Nodo no encontrado
-                            lblRecorrido.Text = "El nodo " + valor + " no existe en el árbol";
+                            lblRecorrido.Text = "El nodo " + valor + " no existe en el ï¿½rbol";
                     }
                     else
                     {
-                        MessageBox.Show("Ingrese un valor numérico válido", "Error de entrada");
+                        MessageBox.Show("Ingrese un valor numï¿½rico vï¿½lido", "Error de entrada");
                     }
                 }
                 else
                 {
-                    lblRecorrido.Text = "El árbol está vacío";
+                    lblRecorrido.Text = "El ï¿½rbol estï¿½ vacï¿½o";
                 }
 
                 // Limpia y enfoca el campo para nueva consulta

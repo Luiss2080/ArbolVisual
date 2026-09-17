@@ -5,8 +5,7 @@ using System.Data;
 using System.Drawing; 
 using System.Linq;
 using System.Text;
-using System.Threading; 
-using System.Windows.Forms;
+using System.Threading;
 
 namespace ArbolBinario
 {
@@ -57,31 +56,36 @@ namespace ArbolBinario
             altura = 0;
         }
 
-        // Implementa la lógica BST recursiva para inserción de nodos
-        public Nodo_Arbol Insertar(int x, Nodo_Arbol t, int Level)
+        // Implementa la lógica BST recursiva para inserción de nodos.
+        // `insertado` indica si el valor se agregó (false si ya existía, es decir, un
+        // duplicado rechazado). La clase Nodo_Arbol es el modelo de datos: no debe
+        // decidir cómo se le informa el resultado al usuario (eso es responsabilidad de
+        // la UI), así que ya no muestra un MessageBox aquí.
+        public Nodo_Arbol Insertar(int x, Nodo_Arbol t, int Level, ref bool insertado)
         {
             if (t == null)
             {
                 // Crea nuevo nodo en posición vacía
                 t = new Nodo_Arbol(x, null, null, null);
                 t.nivel = Level;
+                insertado = true;
             }
             else if (x < t.info)
             {
                 // Navega al subárbol izquierdo aumentando nivel
                 Level++;
-                t.Izquierdo = Insertar(x, t.Izquierdo, Level);
+                t.Izquierdo = Insertar(x, t.Izquierdo, Level, ref insertado);
             }
             else if (x > t.info)
             {
                 // Navega al subárbol derecho aumentando nivel
                 Level++;
-                t.Derecho = Insertar(x, t.Derecho, Level);
+                t.Derecho = Insertar(x, t.Derecho, Level, ref insertado);
             }
             else
             {
-                // Evita duplicados
-                MessageBox.Show("Dato existente en el Arbol", "Error de Ingreso");
+                // Evita duplicados: el árbol no se modifica.
+                insertado = false;
             }
             return t;
         }
@@ -90,20 +94,23 @@ namespace ArbolBinario
 
 
 
-        // Elimina un nodo manteniendo la estructura BST
-        public void Eliminar(int x, ref Nodo_Arbol t)
+        // Elimina un nodo manteniendo la estructura BST.
+        // Devuelve true si se encontró y eliminó el valor, false si no existía en el
+        // árbol. (Antes mostraba un MessageBox directamente desde el modelo; ahora es
+        // la UI -Form1- la que decide qué mensaje mostrar según el resultado.)
+        public bool Eliminar(int x, ref Nodo_Arbol t)
         {
             if (t != null)
             {
                 if (x < t.info)
                 {
                     // Búsqueda recursiva en subárbol izquierdo
-                    Eliminar(x, ref t.Izquierdo);
+                    return Eliminar(x, ref t.Izquierdo);
                 }
                 else if (x > t.info)
                 {
                     // Búsqueda recursiva en subárbol derecho
-                    Eliminar(x, ref t.Derecho);
+                    return Eliminar(x, ref t.Derecho);
                 }
                 else
                 {
@@ -199,11 +206,13 @@ namespace ArbolBinario
                         }
                     }
                 }
+
+                return true;
             }
             else
             {
-                // El nodo a eliminar no existe
-                MessageBox.Show("Nodo NO existente el Arbol", "Error de eliminación");
+                // El nodo a eliminar no existe: no se modifica el árbol.
+                return false;
             }
         }
 
@@ -212,33 +221,19 @@ namespace ArbolBinario
 
 
 
-        // Busca un nodo con valor específico usando el principio BST
-        public void buscar(int x, Nodo_Arbol t)
+        // Busca un nodo con valor específico usando el principio BST.
+        // Devuelve el nodo encontrado, o null si el valor no existe en este subárbol.
+        // (Antes mostraba un MessageBox directamente desde el modelo; ahora es la UI
+        // -Form1- la que decide qué mensaje mostrar según el resultado.)
+        public Nodo_Arbol buscar(int x, Nodo_Arbol t)
         {
-            if (t != null)
-            {
-                if (x == t.info)
-                {
-                    // Nodo encontrado - muestra su ubicación visual
-                    MessageBox.Show("Nodo encontrado en la posición X: " + t.CoordenadaX + " Y:" + t.CoordenadaY);
-                    encontrado(t);
-                }
-                else if (x < t.info)
-                {
-                    // Valor menor - busca en subárbol izquierdo
-                    buscar(x, t.Izquierdo);
-                }
-                else
-                {
-                    // Valor mayor - busca en subárbol derecho
-                    buscar(x, t.Derecho);
-                }
-            }
-            else
-            {
-                // Llegó a nodo nulo - valor no existe
-                MessageBox.Show("Nodo NO encontrado", "Error de búsqueda");
-            }
+            if (t == null)
+                return null;
+
+            if (x == t.info)
+                return t;
+
+            return x < t.info ? buscar(x, t.Izquierdo) : buscar(x, t.Derecho);
         }
 
 
@@ -368,10 +363,5 @@ namespace ArbolBinario
 
 
 
-        // Método para marcar nodo encontrado (incompleto - falta implementación visual)
-        public void encontrado(Nodo_Arbol t)
-        {
-            Rectangle rec = new Rectangle(t.CoordenadaX, t.CoordenadaY, 40, 40);
-        }
     }
 }

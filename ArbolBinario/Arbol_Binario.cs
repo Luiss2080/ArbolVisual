@@ -27,36 +27,46 @@ namespace ArbolBinario
             Raiz = nueva_raiz;
         }
 
-        public void Insertar(int x)
+        /// Inserta x en el árbol. Devuelve false si x ya existía (duplicado
+        /// rechazado, el árbol no cambia) y true si se agregó un nodo nuevo.
+        public bool Insertar(int x)
         {
             // Si el árbol está vacío, se crea la raíz con el valor dado.
             if (Raiz == null)
             {
                 Raiz = new Nodo_Arbol(x, null, null, null);
                 Raiz.nivel = 0; // Nivel de la raíz es 0.
+                return true;
             }
-            else
-                // Si el árbol no está vacío, se inserta el valor en la posición correcta.
-                Raiz = Raiz.Insertar(x, Raiz, Raiz.nivel);
+
+            // Si el árbol no está vacío, se inserta el valor en la posición correcta.
+            bool insertado = false;
+            Raiz = Raiz.Insertar(x, Raiz, Raiz.nivel, ref insertado);
+            return insertado;
         }
 
-        public void Eliminar(int x)
+        /// Elimina x del árbol. Devuelve false si x no existía (el árbol no cambia)
+        /// y true si se encontró y eliminó el nodo.
+        public bool Eliminar(int x)
         {
             // Si el árbol está vacío no hay nada que eliminar.
             // (Antes, por un copiar-y-pegar de Insertar, esta rama creaba un nodo
             // nuevo con el valor `x`: llamar a Eliminar sobre un árbol vacío
             // insertaba un dato en vez de no hacer nada.)
-            if (Raiz != null)
-                Raiz.Eliminar(x, ref Raiz);
+            if (Raiz == null)
+                return false;
+
+            return Raiz.Eliminar(x, ref Raiz);
         }
 
-        public void Buscar(int x)
+        /// Busca x en el árbol. Devuelve el nodo encontrado, o null si el árbol está
+        /// vacío o x no existe.
+        public Nodo_Arbol Buscar(int x)
         {
-            // Si el árbol no está vacío, se llama al método buscar del nodo raíz.
-            if (Raiz != null)
-            {
-                Raiz.buscar(x, Raiz);
-            }
+            if (Raiz == null)
+                return null;
+
+            return Raiz.buscar(x, Raiz);
         }
 
         public void DibujarArbol(Graphics grafo, Font fuente, Brush Relleno, Brush RellenoFuente, Pen Lapiz, Brush encuentro, int anchoFormulario = 800)
