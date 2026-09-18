@@ -1,99 +1,107 @@
-# 🌳 ArbolVisual
+<div align="center">
+  <img src="docs/assets/logo.svg" width="96" alt="Logo de ArbolVisual" />
+  <h1>ArbolVisual</h1>
+  <p><b>Simulador de escritorio para ver, paso a paso, cómo funciona un árbol binario de búsqueda.</b></p>
+  <img src="https://img.shields.io/badge/estado-funcional-2ea44f?style=for-the-badge" alt="Estado: funcional" />
+  <img src="https://img.shields.io/badge/.NET-8.0--windows-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 8" />
+  <img src="https://img.shields.io/badge/UI-Windows%20Forms-0078D4?style=for-the-badge" alt="Windows Forms" />
+  <img src="https://img.shields.io/badge/tests-24%20pasan-2ea44f?style=for-the-badge" alt="24 tests" />
+  <img src="https://img.shields.io/badge/licencia-MIT-blue?style=for-the-badge" alt="MIT" />
+  <br />
+  <img src="https://github.com/Luiss2080/ArbolVisual/actions/workflows/build-and-test.yml/badge.svg" alt="CI" />
+  <p>
+    <a href="#-inicio-rápido">Inicio rápido</a> ·
+    <a href="#-características">Características</a> ·
+    <a href="#-arquitectura">Arquitectura</a> ·
+    <a href="#-pruebas">Pruebas</a> ·
+    <a href="#-lo-que-todavía-no-existe">Limitaciones</a>
+  </p>
+</div>
 
-> Aplicación interactiva en C# y Windows Forms para crear, modificar y
-> visualizar un árbol binario de búsqueda (BST) paso a paso: pensada para
-> aprender de forma visual cómo insertar, eliminar, buscar y recorrer un BST,
-> con el dibujo del árbol recalculado en cada operación.
+ArbolVisual es una aplicación **Windows Forms** pensada para aprender estructuras de datos: insertas, eliminas y buscas enteros (1 a 99) y el dibujo del árbol se recalcula en cada operación. **No** es una librería reutilizable ni una herramienta para árboles balanceados (AVL, rojo-negro): es un BST simple con fines didácticos.
 
-## Características
+## 🎬 Vista rápida
 
-- **Árbol binario de búsqueda real**: inserta, elimina y busca valores
-  enteros (1 a 99) manteniendo la propiedad de orden del BST.
-- **Eliminación con dos hijos correctamente implementada**: al eliminar un
-  nodo con dos hijos se promueve su predecesor in-order (el mayor valor de
-  su subárbol izquierdo), reconectando los enlaces restantes. Cubierto por
-  pruebas automatizadas que verifican que el árbol resultante siga siendo
-  un BST válido (recorrido en-orden ordenado, sin nodos perdidos ni
-  duplicados), incluyendo el caso en que el predecesor tiene a su vez un
-  hijo izquierdo que debe promoverse.
-- **Recorridos en-orden, pre-orden y post-orden**, mostrados como texto y
-  animados visualmente (cada nodo se resalta en rojo un momento, en el
-  orden del recorrido elegido).
-- **Estadísticas del árbol**: altura, suma de los valores, cantidad de
-  nodos y profundidad de un valor específico.
-- **Operaciones seguras en casos límite**: insertar un valor duplicado o
-  eliminar/buscar un valor inexistente no corrompen el árbol ni bloquean la
-  aplicación; el árbol vacío se maneja sin errores (ver nota más abajo).
-- **El dibujo del árbol se recalcula por completo en cada operación**
-  (`Arbol_Binario.DibujarArbol` vuelve a calcular la posición de cada nodo
-  desde la raíz), por lo que lo que se ve en pantalla nunca queda
-  desincronizado de la estructura real tras insertar o eliminar.
+Captura real de la aplicación con un árbol de 10 nodos tras usar *Recorrido In-Orden* (el nodo 20 aparece en rojo porque la captura se tomó durante la animación del recorrido):
 
-### Nota sobre un bug corregido
+<div align="center">
+  <img src="docs/screenshots/simulador.png" width="720" alt="Ventana del simulador con un árbol binario de búsqueda de 10 nodos y el recorrido en orden 20 30 35 40 45 50 60 65 70 80" />
+</div>
 
-Antes, llamar a **Eliminar** con el árbol vacío insertaba silenciosamente
-ese valor en vez de no hacer nada (un copiar-y-pegar del código de
-Insertar). Ya está corregido: eliminar sobre un árbol vacío simplemente no
-hace nada.
+## ✨ Características
 
-### Limitación conocida
+| Característica | Detalle |
+|---|---|
+| Insertar / eliminar / buscar | Enteros de 1 a 99, manteniendo la propiedad de orden del BST |
+| Eliminación con dos hijos | Se promueve el predecesor in-order (mayor del subárbol izquierdo); cubierto por pruebas que verifican que el árbol siga siendo un BST válido |
+| Recorridos | En-orden, pre-orden y post-orden, mostrados como texto y animados resaltando cada nodo en rojo |
+| Estadísticas | Altura, suma de valores, cantidad de nodos y profundidad de un valor |
+| Casos límite | Duplicados, valores inexistentes y árbol vacío no corrompen el árbol ni bloquean la app |
+| Dibujo | `Arbol_Binario.DibujarArbol` recalcula la posición de todos los nodos desde la raíz en cada operación (GDI+) |
 
-Al buscar un valor, la posición del nodo encontrado se informa por texto
-(coordenadas X/Y) en un cuadro de diálogo, pero el nodo no se resalta
-visualmente sobre el dibujo del árbol (a diferencia de los recorridos, que
-sí animan cada nodo). Es una función incompleta heredada del código
-original, no un objetivo de esta ronda de correcciones.
+## 🏗️ Arquitectura
 
-## Cómo usar
+```mermaid
+flowchart LR
+    Form1["Form1<br/>(botones, animación, eventos)"] -->|"Insertar / Eliminar / Buscar / recorridos"| AB["Arbol_Binario<br/>(lógica del BST + DibujarArbol)"]
+    AB --> N["Nodo_Arbol<br/>(info, Izquierdo, Derecho, Padre)"]
+    AB -->|"System.Drawing"| G["Graphics / Bitmap"]
+    T["ArbolBinario.Tests<br/>(xUnit)"] -->|"sin interfaz gráfica"| AB
+```
 
-1. Abre `ArbolBinario.sln` en Visual Studio (con la carga de trabajo *.NET
-   desktop development*) y presiona **F5**, o compílalo desde la línea de
-   comandos (ver más abajo) y ejecuta el `.exe` generado.
-2. Escribe un valor entre 1 y 99 y usa **Insertar**, **Eliminar** o
-   **Buscar**.
-3. Usa los botones de recorrido (**En-Orden**, **Pre-Orden**, **Post-Orden**)
-   para ver la animación del recorrido elegido, o los botones de
-   **Altura**, **Suma de nodos**, **Contar nodos** y **Profundidad** para
-   ver estadísticas del árbol actual.
+<details>
+<summary>Estructura de carpetas</summary>
 
-## Instalación y uso local
+```
+ArbolBinario/           App WinForms (net8.0-windows)
+  Program.cs            Punto de entrada
+  Form1.cs              Ventana principal, eventos y animación de recorridos
+  Arbol_Binario.cs      Lógica del BST y dibujo
+  Nodo_Arbol.cs         Nodo del árbol
+ArbolBinario.Tests/     Pruebas xUnit del BST
+ArbolBinario.sln
+.github/workflows/build-and-test.yml
+```
 
-Requiere Windows y el SDK de .NET 8 (el proyecto compila sobre
-`net8.0-windows`).
+</details>
+
+## 🚀 Inicio rápido
+
+| Requisito | Versión |
+|---|---|
+| Windows | Necesario (Windows Forms) |
+| SDK de .NET | 8 (`net8.0-windows`) |
 
 ```bash
 git clone https://github.com/Luiss2080/ArbolVisual.git
 cd ArbolVisual
-
-# Compilar la app y el proyecto de pruebas
 dotnet build ArbolBinario.sln
-
-# Ejecutar la app (WinForms; requiere Windows)
 dotnet run --project ArbolBinario/ArbolBinario.csproj
 ```
 
-## Tecnologías
+1. Escribe un valor entre 1 y 99 en el cuadro de **Insertar Nodo**, o en los de **Eliminar** / **Buscar**.
+2. Usa **Recorrido In-Orden / Pre-Orden / Post-Orden** para ver el recorrido animado.
+3. Usa **Mostrar Altura**, **Sumar Nodos**, **Contar Nodos** y **Mostrar Profundidad** para las estadísticas.
 
-- **C#** sobre **.NET 8** (`net8.0-windows`, `ArbolBinario.csproj`)
-- **Windows Forms**, con dibujo personalizado del árbol mediante
-  `System.Drawing`/GDI+
-- **xUnit** para las pruebas unitarias del BST
-- **GitHub Actions** para build y pruebas automáticas en cada cambio
-  (`.github/workflows/build-and-test.yml`)
+## 🧪 Pruebas
 
-## Tests
-
-El BST (`Arbol_Binario`/`Nodo_Arbol`) está cubierto por 24 pruebas
-unitarias que no dependen de la interfaz gráfica: inserción, eliminación
-(incluyendo el caso de dos hijos, en varias formas de árbol), búsqueda,
-recorridos en árboles balanceados y degenerados, y casos límite (árbol
-vacío, un solo nodo, eliminar la raíz repetidamente, duplicados, valores
-inexistentes).
+24 pruebas xUnit sobre `Arbol_Binario`/`Nodo_Arbol`, sin depender de la interfaz: inserción, eliminación (incluido el caso de dos hijos en varias formas de árbol), búsqueda, recorridos en árboles balanceados y degenerados, y casos límite. Las 24 pasan al escribir este README.
 
 ```bash
 dotnet test ArbolBinario.Tests/ArbolBinario.Tests.csproj
 ```
 
-## Licencia
+La interfaz gráfica no tiene pruebas automáticas. CI: `.github/workflows/build-and-test.yml` compila la solución y ejecuta las pruebas en `windows-latest`.
 
-MIT. Consulta el archivo [`LICENSE`](LICENSE).
+## 🚧 Lo que todavía no existe
+
+- **Buscar** informa las coordenadas del nodo en un cuadro de diálogo, pero **no lo resalta** sobre el dibujo (función incompleta heredada del código original).
+- Solo enteros de 1 a 99; sin balanceo automático (con datos ordenados el árbol degenera en lista).
+- Solo Windows; sin pruebas de la interfaz.
+- Corregido: **Eliminar** sobre un árbol vacío antes insertaba el valor por un error de copiar-y-pegar; ahora no hace nada.
+
+## 📄 Licencia
+
+MIT. Ver [`LICENSE`](LICENSE).
+
+<div align="center"><sub>Hecho por Luiss2080 · C# · Windows Forms</sub></div>
